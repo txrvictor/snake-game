@@ -1,0 +1,21 @@
+@import "../styles/variables";
+
+
+.multi-layer-border {
+  border: $color1 solid 10px;
+  border-radius: 30px;
+  box-shadow: inset 0 0 0 10px $color1;
+
+  > div {
+    border: $color2 solid 8px;
+    border-radius: 26px;
+    box-shadow: inset 0 0 0 10px $color2;
+
+    > div {
+      border: $color3 solid 30px;
+      border-radius: 20px;
+      box-shadow: inset 0 0 0 5px $color3;
+      background-color: $background;
+    }
+  }
+}

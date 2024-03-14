@@ -1,0 +1,16 @@
+@import "../styles/variables";
+
+.logo-text {
+  position: absolute;
+  top: 60%;
+  color: #333333;
+  width: 300px;
+  text-align: center;
+  padding: 30px;
+  margin: 0;
+}
+
+.logo-img {
+  position: absolute;
+  background-color: $background;
+}

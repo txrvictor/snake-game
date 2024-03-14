@@ -1,9 +1,20 @@
+import Border from './components/border'
+import Board from './components/board'
+import Logo from './components/logo'
+
 
 function App() {
 
   return (
     <>
-     <div></div>
+     <div>
+      {/* TODO add score */}
+      <Border>
+        <Board />
+      </Border>
+     </div>
+
+     <Logo />
     </>
   )
 }
