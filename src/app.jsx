@@ -13,17 +13,17 @@ function App() {
 
   return (
     <ScoreContext.Provider value={{setScore, setHighestScore}}>
-     <div>
-      <Score
-        score={score}
-        highestScore={highestScore}
-      />
-      <Border>
-        <Board />
-      </Border>
-     </div>
+    <Score
+      score={score}
+      highestScore={highestScore}
+    />
+    <Border>
+      <Board />
 
-     <Logo />
+      {/* absolute over board */}
+      <Logo />
+    </Border>
+
     </ScoreContext.Provider>
   )
 }

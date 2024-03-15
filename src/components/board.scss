@@ -1,8 +1,13 @@
 
 .board {
-  border-radius: 100px;
   display: grid;
   grid-template-columns: repeat(20, 20px);
   grid-template-rows: repeat(20, 20px);
   margin: 5px;
+  border-radius: 100px;
+}
+
+.snake-part {
+  background-color: #414141;
+  border: #5a5a5a 1px dotted;
 }

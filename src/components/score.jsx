@@ -15,8 +15,8 @@ Score.defaultProps = {
 function Score({score, highestScore}) {
   return (
     <div className='score-container'>
-      <h1 className='score'>{padScore(score)}</h1>
       <h1 className='highest-score'>{padScore(highestScore)}</h1>
+      <h1 className='score'>{padScore(score)}</h1>
     </div>
   )
 }

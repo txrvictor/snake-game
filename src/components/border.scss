@@ -2,6 +2,7 @@
 
 
 .multi-layer-border {
+  position: relative;
   border: $color1 solid 10px;
   border-radius: 30px;
   box-shadow: inset 0 0 0 10px $color1;
