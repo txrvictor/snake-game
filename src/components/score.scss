@@ -1,0 +1,20 @@
+@import "../styles/variables";
+
+.score-container {
+  display: flex;
+  justify-content: space-between;
+
+  > h1 {
+    font-size: 40px;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+}
+
+.score {
+  color: $color2;
+}
+
+.highest-score {
+  color: $color4;
+}
