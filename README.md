@@ -1,2 +1,3 @@
 # snake-game
-Classic snake game for fun
+
+React implementation of the classic snake game just for fun!
