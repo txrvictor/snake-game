@@ -1,7 +1,7 @@
 import { useContext } from "react"
-import { ScoreContext } from "../contexts/score"
+import ScoreContext from "../contexts/score"
 
-export default function useScores() {
+const useScores = () => {
   const context = useContext(ScoreContext)
   if (context === undefined) {
     throw new Error('useScores must be used within ScoreContext')
@@ -9,3 +9,5 @@ export default function useScores() {
 
   return context
 }
+
+export default useScores

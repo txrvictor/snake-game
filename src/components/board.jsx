@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import useScores from '../hooks/useScores'
-import Logo from './components/logo'
+import useControls from '../hooks/useControls'
+import Logo from './logo'
 
 import './board.scss'
 
@@ -13,35 +14,43 @@ function Board() {
   const [snake, setSnake] = useState([{x: 10, y: 10}])
   const [food, setFood] = useState()
 
+  const {score, setScore, setHighestScore} = useScores()
+  const direction = useControls()
+
+  const generateRandomFood = useCallback(() => {
+    setFood({
+      x: Math.floor(Math.random() * GRID_SIZE) + 1,
+      y: Math.floor(Math.random() * GRID_SIZE) + 1,
+    })
+  }, [])
+
   const runningInterval = useRef()
 
-  const {score, setScore, setHighestScore} = useScores()
-
-  useEffect(() => {
-    clearInterval(runningInterval.current)
-
-    if (isRunning) {
-      runningInterval.current = setInterval(() => {
-        // move()
-        // checkCollision()
-      }, runningDelay)
+  const move = useRef()
+  move.current = () => {
+    const snakeCopy = [...snake]
+    const head = {...snakeCopy[0]}
+    switch (direction) {
+      case 'up':
+        head.y--
+        break
+      case 'down':
+        head.y++
+        break
+      case 'left':
+        head.x--
+        break
+      case 'right':
+        head.x++
+        break
     }
-
-    // clean up on unmount
-    return () => {
-      clearInterval(runningInterval.current)
-    }
-  }, [isRunning, runningDelay])
-
-  useEffect(() => {
-    const head = snake[0]
+  
+    // set new head in front of the snake
+    snakeCopy.unshift(head)
 
     if (head.x === food?.x && head.y === food?.y) {
-      // generate random food
-      setFood({
-        x: Math.floor(Math.random() * GRID_SIZE) + 1,
-        y: Math.floor(Math.random() * GRID_SIZE) + 1,
-      })
+      generateRandomFood()
+
       // increase game speed
       setRunningDelay((prevSpeed) => {
         let speed = prevSpeed
@@ -56,8 +65,49 @@ function Board() {
         }
         return speed
       })
+    } else {
+      // snake didn't eat so remove tail after we moved the head forward
+      snakeCopy.pop()
     }
-  }, [snake, food])
+
+    setSnake(snakeCopy)
+  }
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      const {key, code} = event
+      if (code === 'Space' || key === ' ') {
+        setIsRunning(true)
+      }
+    }      
+    document.addEventListener('keydown', handleKeyPress)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isRunning) {
+      generateRandomFood()
+    }
+  }, [isRunning])
+
+  useEffect(() => {
+    clearInterval(runningInterval.current)
+
+    if (isRunning) {
+      runningInterval.current = setInterval(() => {
+        move?.current && move.current()
+        // checkCollision()
+      }, runningDelay)
+    }
+
+    // clean up on unmount
+    return () => {
+      clearInterval(runningInterval.current)
+    }
+  }, [isRunning, runningDelay])
 
   return (
     <>
