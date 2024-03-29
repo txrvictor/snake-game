@@ -11,7 +11,7 @@ function App() {
   const [highestScore, setHighestScore] = useState(0)
 
   return (
-    <ScoreContext.Provider value={{score, setScore, setHighestScore}}>
+    <ScoreContext.Provider value={{score, highestScore, setScore, setHighestScore}}>
       <Score
         score={score}
         highestScore={highestScore}

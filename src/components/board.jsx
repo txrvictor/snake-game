@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useRef, useState } from 'react'
 import useScores from '../hooks/useScores'
 import useControls from '../hooks/useControls'
@@ -6,15 +7,17 @@ import Logo from './logo'
 import './board.scss'
 
 const GRID_SIZE = 20
+const INITIAL_SNAKE = [{x: 10, y: 10}]
+const INITIAL_DELAY = 200
 
 function Board() {
   const [isRunning, setIsRunning] = useState(false)
-  const [runningDelay, setRunningDelay] = useState(200)
+  const [runningDelay, setRunningDelay] = useState(INITIAL_DELAY)
 
-  const [snake, setSnake] = useState([{x: 10, y: 10}])
+  const [snake, setSnake] = useState(INITIAL_SNAKE)
   const [food, setFood] = useState()
 
-  const {score, setScore, setHighestScore} = useScores()
+  const {setScore, setHighestScore} = useScores()
   const direction = useControls()
 
   const generateRandomFood = useCallback(() => {
@@ -22,6 +25,20 @@ function Board() {
       x: Math.floor(Math.random() * GRID_SIZE) + 1,
       y: Math.floor(Math.random() * GRID_SIZE) + 1,
     })
+  }, [])
+
+  const gameOver = useCallback(() => {
+    setScore((prevScore) => {
+      setHighestScore((prevHighestScore) => {
+        return prevScore > prevHighestScore ? prevScore : prevHighestScore
+      })
+      // reset score
+      return 0
+    })
+    setIsRunning(false)
+    setRunningDelay(INITIAL_DELAY)
+    setSnake(INITIAL_SNAKE)
+    setFood(undefined)
   }, [])
 
   const runningInterval = useRef()
@@ -41,6 +58,7 @@ function Board() {
         head.x--
         break
       case 'right':
+      default:
         head.x++
         break
     }
@@ -71,6 +89,7 @@ function Board() {
     }
 
     setSnake(snakeCopy)
+    setScore(snake.length - 1)
   }
 
   useEffect(() => {
@@ -108,6 +127,24 @@ function Board() {
       clearInterval(runningInterval.current)
     }
   }, [isRunning, runningDelay])
+
+  // check for collision
+  useEffect(() => {
+    const head = snake[0]
+    const {x, y} = head
+
+    if (x < 1 || x > GRID_SIZE || y < 1 || y > GRID_SIZE) {
+      gameOver()
+      return
+    }
+  
+    for (let i = 1; i < snake.length; i++) {
+      if (x === snake[i].x && y === snake[i].y) {
+        gameOver()
+        return
+      }
+    }
+  }, [snake])
 
   return (
     <>
